@@ -1,11 +1,4 @@
 from pprint import pprint
-class Ingridients:
-    
-    def __init__(self, string) -> None:
-        array_ingridient = string.strip().split(' | ')
-        # ingredient_name, quantity,measure 
-        self.ingirdients_list = {'ingredient_name' : array_ingridient[0],
-        'quantity' : array_ingridient[1], 'measure' : array_ingridient[2]}
 
 def make_cook_book(file_name):
     cook_book_ = {}
@@ -24,44 +17,28 @@ def make_cook_book(file_name):
         f.readline()
     return cook_book_
 
+# составляем список для покупки.
+# Из книги рецептов выбираем нужный нам рецепт.
+# создаем новый словарь из прежнего где key= название, а значение оставшийся словарь
+# с зимененным кол-вом в зависимости от повторения и кол-ва персон
 def get_shop_list_by_dishes(dishes, person_count):
    shop_list = {}
    for  dish in dishes:
       for ingridients in cook_book.get(dish):
           value_ = ingridients.pop('ingredient_name')
           double_ingridient = shop_list.get(value_)
-          if double_ingridient :
-             print(double_ingridient)
+          if double_ingridient : 
              ingridients['quantity'] = double_ingridient['quantity'] + int(ingridients['quantity']) * person_count
           else: 
-             ingridients['quantity'] = int(ingridients['quantity']) * person_count
-          # print(ingridients)
+             ingridients['quantity'] = int(ingridients['quantity']) * person_count       
           shop_list[value_] = ingridients
-          
-             
-      # print(len(cook_book.get(dish)))
-      # shop_list[]
-
    return shop_list
 
 
 # Задача №1 выполнено
-cook_book = make_cook_book("recipes.txt")     
-# pprint(cook_book)
-
-# Задача №2
+cook_book = make_cook_book("recipes.txt")  
+pprint(cook_book)   
+# Задача №2 выполнено
 # get_shop_list_by_dishes(['Запеченный картофель', 'Омлет'], 2)
-# Должен быть следующий результат:
-
-# {
-#   'Картофель': {'measure': 'кг', 'quantity': 2},
-#   'Молоко': {'measure': 'мл', 'quantity': 200},
-#   'Помидор': {'measure': 'шт', 'quantity': 4},
-#   'Сыр гауда': {'measure': 'г', 'quantity': 200},
-#   'Яйцо': {'measure': 'шт', 'quantity': 4},
-#   'Чеснок': {'measure': 'зубч', 'quantity': 6}
-# }
-# pprint(get_shop_list_by_dishes(['Запеченный картофель', 'Омлет'], 2))
-
 pprint(get_shop_list_by_dishes(['Яичница', 'Омлет'], 2))
-# pprint(cook_book)
+#кол-во яиц в яичнице взято для наглядного примера что яйца суммируются
