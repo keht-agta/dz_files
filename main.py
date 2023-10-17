@@ -7,54 +7,61 @@ class Ingridients:
         self.ingirdients_list = {'ingredient_name' : array_ingridient[0],
         'quantity' : array_ingridient[1], 'measure' : array_ingridient[2]}
 
-cook_book_ = {
-  'Омлет': [
-    {'ingredient_name': 'Яйцо', 'quantity': 2, 'measure': 'шт.'},
-    {'ingredient_name': 'Молоко', 'quantity': 100, 'measure': 'мл'},
-    {'ingredient_name': 'Помидор', 'quantity': 2, 'measure': 'шт'}
-    ],
-   'Яичница': [
-    {'ingredient_name': 'Яйцо', 'quantity': 2, 'measure': 'шт.'},
-    {'ingredient_name': 'Колбаса', 'quantity': 50, 'measure': 'г'}, 
-   ],  
-  'Утка по-пекински': [
-    {'ingredient_name': 'Утка', 'quantity': 1, 'measure': 'шт'},
-    {'ingredient_name': 'Вода', 'quantity': 2, 'measure': 'л'},
-    {'ingredient_name': 'Мед', 'quantity': 3, 'measure': 'ст.л'},
-    {'ingredient_name': 'Соевый соус', 'quantity': 60, 'measure': 'мл'}
-    ],
-  'Запеченный картофель': [
-    {'ingredient_name': 'Картофель', 'quantity': 1, 'measure': 'кг'},
-    {'ingredient_name': 'Чеснок', 'quantity': 3, 'measure': 'зубч'},
-    {'ingredient_name': 'Сыр гауда', 'quantity': 100, 'measure': 'г'},
-    ]
-  }
+def make_cook_book(file_name):
+    cook_book_ = {}
+    with open(file_name, "r",encoding="utf-8") as f:
+      while True:
+        name = f.readline().strip()
+        if not name:
+            break #конец файла
+        cook_book_[name] = []
+        count = int(f.readline().strip())
+        # print(int(count))
+        for i in range(count):
+            line = f.readline().strip().split(' | ')
+            # print(line)
+            cook_book_[name].append({'ingredient_name' : line[0], 'quantity' : line[1], 'measure' : line[2]})
+        f.readline()
+    return cook_book_
+
+def get_shop_list_by_dishes(dishes, person_count):
+   shop_list = {}
+   for  dish in dishes:
+      for ingridients in cook_book.get(dish):
+          value_ = ingridients.pop('ingredient_name')
+          double_ingridient = shop_list.get(value_)
+          if double_ingridient :
+             print(double_ingridient)
+             ingridients['quantity'] = double_ingridient['quantity'] + int(ingridients['quantity']) * person_count
+          else: 
+             ingridients['quantity'] = int(ingridients['quantity']) * person_count
+          # print(ingridients)
+          shop_list[value_] = ingridients
+          
+             
+      # print(len(cook_book.get(dish)))
+      # shop_list[]
+
+   return shop_list
 
 
+# Задача №1 выполнено
+cook_book = make_cook_book("recipes.txt")     
+# pprint(cook_book)
 
-cook_book = {}
-# omlet = Ingridients('Яйцо', 2,'шт.')     
-# print(type(omlet.ingirdients_list))
-# print(omlet.ingirdients_list)
-# cook_book = {}
-with open('recipes.txt', "r",encoding="utf-8") as f:
-    name = f.readline().strip()
-    cook_book[name] = []
-    count = int(f.readline().strip())
-    print(int(count))
-    for i in range(count):
-        line = f.readline().strip().split(' | ')
-        print(line)
-        cook_book[name].append({'ingredient_name' : line[0], 'quantity' : line[1], 'measure' : line[2]})
+# Задача №2
+# get_shop_list_by_dishes(['Запеченный картофель', 'Омлет'], 2)
+# Должен быть следующий результат:
 
-pprint(cook_book)
+# {
+#   'Картофель': {'measure': 'кг', 'quantity': 2},
+#   'Молоко': {'measure': 'мл', 'quantity': 200},
+#   'Помидор': {'measure': 'шт', 'quantity': 4},
+#   'Сыр гауда': {'measure': 'г', 'quantity': 200},
+#   'Яйцо': {'measure': 'шт', 'quantity': 4},
+#   'Чеснок': {'measure': 'зубч', 'quantity': 6}
+# }
+# pprint(get_shop_list_by_dishes(['Запеченный картофель', 'Омлет'], 2))
 
-    # cook_book[line] += 
-    # while line:
-    #     cook_book
-    #     line = f.readline()
-    #     print(line)
-
-#print(type(cook_book['Омлет'][0]))
-
-        
+pprint(get_shop_list_by_dishes(['Яичница', 'Омлет'], 2))
+# pprint(cook_book)
